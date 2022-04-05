@@ -1,0 +1,6 @@
+/* a태그의 선과 색을 나타내기 위한 css 파일 */
+
+a {
+  color: blue;
+  text-decoration: none;
+}
