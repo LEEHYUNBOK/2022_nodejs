@@ -6,13 +6,13 @@ const dotenv = require('dotenv')
 const path = require('path')
 
 dotenv.config()
+
+// router 사용
+const indexRouter = require('./routes')
+const userRouter = require('./routes/user')
+
 const app = express()
 app.set('port', process.env.PORT || 3000)
-
-// app.get('/', (req, res) => {
-//   // res.send('Hello, Express')
-//   res.sendFile(path.join(__dirname, '/index.html'))
-// })
 
 app.use(morgan('dev'))
 app.use('/', express.static(path.join(__dirname, 'public')))
@@ -37,6 +37,52 @@ app.use((req, res, next) => {
   next()
 })
 
+// multer 미들웨어 사용
+const multer = require('multer')
+const fs = require('fs')
+
+try {
+  fs.readdirSync('uploads')
+} catch (error) {
+  console.error('uploads 폴더가 없어 uploads 폴더를 생성합니다.')
+  fs.mkdirSync('uploads')
+}
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, done) {
+      done(null, 'uploads/')
+    },
+    filename(req, file, done) {
+      const ext = path.extname(file.originalname)
+      done(null, path.basename(file.originalname, ext) + Date.now() + ext)
+    },
+  }),
+  limits: { fileSize: 5 * 1024 * 1024 },
+})
+
+app.get('/upload', (req, res) => {
+  console.log('TTT')
+  res.sendFile(path.join(__dirname, 'multipart.html'))
+})
+
+app.post(
+  '/upload',
+  upload.fields([{ name: 'image1' }, { name: 'image2' }]),
+  (req, res) => {
+    console.log(req.files, req.body)
+    res.send('ok')
+  }
+)
+
+// router 사용법
+app.use('/', indexRouter)
+app.use('/user', userRouter)
+
+app.use((req, res, next) => {
+  res.status(404).send('Not Found')
+})
+
+// /경로로 실행시 에러 발생 시키기
 app.get(
   '/',
   (req, res, next) => {
@@ -48,6 +94,12 @@ app.get(
   }
 )
 
+// app.get('/', (req, res) => {
+//   // res.send('Hello, Express')
+//   res.sendFile(path.join(__dirname, '/index.html'))
+// })
+
+// 미들웨어 에러 발생시
 app.use((err, req, res, next) => {
   console.error(err)
   res.status(500).send(err.message)
