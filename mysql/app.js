@@ -34,7 +34,7 @@ nunjucks.configure('views', {
 sequelize
   .sync({ force: false })
   .then(() => {
-    console.log('데이터베이스 연결 성공')
+    console.log('@app.js : 데이터베이스 연결 성공')
   })
   .catch((err) => {
     console.error(err)
@@ -45,6 +45,7 @@ sequelize
 // 인수로 dev 외에 combined, common, short, tiny 등 사용 가능
 app.use(morgan('dev'))
 
+// publie/sequelize.js를 상위 파일로 지정
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -61,7 +62,6 @@ app.use((req, res, next) => {
   next(error)
 })
 
-//
 app.use((err, req, res, next) => {
   res.locals.message = err.message
   res.locals.error = process.env.NODE_ENV !== 'production' ? err : {}
@@ -71,5 +71,5 @@ app.use((err, req, res, next) => {
 
 // 포트를 연결하고 서버를 실행
 app.listen(app.get('port'), () => {
-  console.log(app.get('port'), '번 포트에서 대기 중')
+  console.log('@app.js : ' + app.get('port'), '번 포트에서 대기 중')
 })

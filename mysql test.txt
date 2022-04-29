@@ -1,0 +1,54 @@
+ - npm start 시
+ 1. app.js : 3001 번 포트 에서 대기 중
+ 2. app.js : 데이터베이스 연결 성공
+ - http://localhost:3001/ 접속시
+ 1. app.js : indexRouter 
+ 1. routes/index.js : GET / 라우터 실행 moduls/user.js의 User.findAll() 실행
+ 2. sequelize.html : users의 전체 정보 출력
+
+ - user 입력시
+ 1. sequelize.html : user-form 의 submit 누르면 user-form 정보가 sequelize.js로 전송
+ 2. sequelize.js : html 의 정보 여부 확인 후 POST /user 주소 요청
+ 3. routes/users.js : POST /user 주소로 실행, moduls/user.js의 User.create(이름, 나이, 결혼여부)를 실행하여 users Table에 추가
+ 4. sequelize.js : user 저장이 완료되면 getUser() 실행
+ 5. sequelize.js : GET /user 주소 요청
+ 6. routes/users.js : GET /user 주소로 실행되어 moduls/user.js의 User.findAll() 실행 후 sequelize.html에 <table>형식으로 저장
+ 7.  sequelize.html : 수정 후 출력
+
+ - user 클릭 시
+ 1. sequelize.js : getCommet(user.id) 함수 실행
+ 2. sequelize.js : GET /users/${id}/comments 주소 요청
+ 3. routes/users.js : moduls/comment.js의 Comment.findAll() 실행
+ 		(단 comment의 id가 sequelize.js에서 받은 Request 의 id 값과 같은 것만 모두 출력)
+ 4. sequelize.js : sequelize.html의 #comment-list tbody 위치에 comments 정보 출력
+
+ - 댓글 작성 시
+ 1. sequelize.html : comment-form 의 submit 누르면 comment-form 정보가 sequelize.js로 전송
+ 2. sequelize.js : html 의 정보 여부 확인 후 POST /comments 주소 요청
+ 3. routes/comments.js :  moduls/comment.js의 Comment.create(id, 내용)를 실행하여 comments Table에 추가
+ 4. sequelize.js : comment 저장이 완료되면 getComment() 실행
+ 5. sequelize.js : GET /users/${id}/comments 주소 요청
+ 6. routes/users.js : moduls/comment.js의 Comment.findAll() 실행하여 mysql에 있는 모든 comment 입력받아 JSON형식으로 저장 후 응답
+ 		(단 comment의 id가 sequelize.js에서 받은 Request 의 id 값과 같은 것만 모두 출력)
+ 7. sequelize.js : sequelize.html의 #comment-list tbody 위치에 comments 정보 출력
+
+ - 댓글 삭제 시
+ 1. sequelize.html : 삭제 버튼을 클릭 
+ 2. sequelize.js : 버튼 클릭 시 event 실행, DELETE /comments/${comment.id} 주소 요청
+ 2. routes/comments.js : DELETE /comments/${comment.id} 주소에서  moduls/comment.js의 Comment.destroy() 실행하여 Request로 받은 id가 같은 comment를 찾은 후 comments Table의 commnet 삭제
+ 3. sequelize.js : comment 삭제가 완료되면 getComment(id) 실행
+ 4. sequelize.js : GET /users/${id}/comments 주소 요청
+ 5. routes/users.js : moduls/comment.js의 Comment.findAll() 실행하여 mysql에 있는 모든 comment 입력받아 JSON형식으로 저장 후 응답
+ 		(단 comment의 id가 sequelize.js에서 받은 Request 의 id 값과 같은 것만 모두 출력)
+ 6. sequelize.js : sequelize.html의 #comment-list tbody 위치에 comments 정보 출력
+
+ - 댓글 수정 시
+ 1. sequelize.html : 수정 버튼 클릭
+ 1. sequelize.js : 버튼 클릭 시 event 실행, PATCH /comments/${comment.id} 주소 요청
+ 2. routes/comments.js : /comments/${comment.id} 주소에서 moduls/comment.js의 Comment.update() 실행하여 Request로 받은 id가 같은 comment를 찾은 후 comments Table의 commnet 수정
+ 3. sequelize.js : comment 수정이 완료되면 getComment(id) 실행
+ 4. sequelize.js : GET /users/${id}/comments 주소 요청
+ 5. routes/users.js : moduls/comment.js의 Comment.findAll() 실행하여 mysql에 있는 모든 comment 입력받아 JSON형식으로 저장 후 응답
+ 		(단 comment의 id가 sequelize.js에서 받은 Request 의 id 값과 같은 것만 모두 출력)
+ 6. sequelize.js : sequelize.html의 #comment-list tbody 위치에 comments 정보 출력
+

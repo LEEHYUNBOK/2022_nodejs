@@ -10,7 +10,7 @@ async function getUser() {
   try {
     const res = await axios.get('/users')
     const users = res.data
-    console.log(users)
+    console.log('@sequelize.js : ' + users)
     const tbody = document.querySelector('#user-list tbody')
     tbody.innerHTML = ''
     users.map(function (user) {

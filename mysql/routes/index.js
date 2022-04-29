@@ -11,6 +11,7 @@ router.get('/', async (req, res, next) => {
     // User를 모두 찾는 findAll
     const users = await User.findAll()
     // users과 함께 sequelize.html을 렌더링
+    console.log('@routes/index.js :' + JSON.stringify(users))
     res.render('sequelize', { users })
   } catch (err) {
     // 오류시 error 출력

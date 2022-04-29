@@ -15,7 +15,7 @@ router.post('/', async (req, res, next) => {
       comment: req.body.comment,
     })
     // comment 정보 log
-    console.log(comment)
+    console.log('@routes/comments.js post' + comment)
 
     // 성공적으로 처리되면 user의 데이터를 JSON 형식으로 반환
     res.status(201).json(comment)
@@ -40,6 +40,7 @@ router
           where: { id: req.params.id },
         }
       )
+      console.log('@routes/comments.js patch' + result)
       // result의 데이터를 JSON 형식으로 반환
       res.json(result)
     } catch (err) {
@@ -52,6 +53,7 @@ router
     try {
       // comment의 id가 파라미터로 받은 id 값과 같은 comment를 찾아서 삭제
       const result = await Comment.destroy({ where: { id: req.params.id } })
+      console.log('@routes/comments.js delete' + result)
       // result의 데이터를 JSON 형식으로 반환
       res.json(result)
     } catch (err) {

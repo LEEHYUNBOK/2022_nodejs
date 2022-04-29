@@ -30,7 +30,7 @@ router
         married: req.body.married,
       })
       // user 정보 log
-      console.log(user)
+      console.log('@routes/users.js post' + user)
       // 상태코드 201 : 요청이 성공적으로 처리되었으며, 자원이 생성되었음을 나타내는 성공 상태 응답 코드
       // user의 데이터를 JSON 형식으로 반환
       res.status(201).json(user)
@@ -50,7 +50,7 @@ router.get('/:id/comments', async (req, res, next) => {
       },
     })
     // comments 정보 log
-    console.log(comments)
+    console.log('@routes/users.js get' + comments)
     // comments의 데이터를 JSON 형식으로 반환
     res.json(comments)
   } catch (err) {
