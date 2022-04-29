@@ -22,10 +22,9 @@
           <div><input id="username" type="text" placeholder="이름" /></div>
           <div><input id="age" type="number" placeholder="나이" /></div>
           <div>
-            <input id="married" type="checkbox" /><label for="married"
-              >결혼여부</label
-            >
+            <input id="married" type="checkbox" /><label for="married">결혼여부</label>
           </div>
+	        // user-form 의 submit 클릭 시 sequelize의 함수 실행
           <button type="submit">등록</button>
         </fieldset>
       </form>
@@ -41,11 +40,16 @@
         </tr>
       </thead>
       <tbody>
+         // sequelize의 getUser()에서 받은 정보 for 문으로 출력
         {% for user in users %}
         <tr>
+         // user의 id 출력
           <td>{{user.id}}</td>
+         // user의 name 출력
           <td>{{user.name}}</td>
+         // user의 age 출력
           <td>{{user.age}}</td>
+         // user의 married 가 true면 '기혼' false이면 '미혼'
           <td>{{ '기혼' if user.married else '미혼'}}</td>
         </tr>
         {% endfor %}
@@ -60,6 +64,7 @@
             <input id="userid" type="text" placeholder="사용자 아이디" />
           </div>
           <div><input id="comment" type="text" placeholder="댓글" /></div>
+          // comment-form 의 submit 클릭 시 sequelize의 함수 실행
           <button type="submit">등록</button>
         </fieldset>
       </form>
@@ -75,6 +80,7 @@
           <th>삭제</th>
         </tr>
       </thead>
+      // sequelize의 getComments()에서 받은 정보 for 문으로 출력
       <tbody></tbody>
     </table>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
