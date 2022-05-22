@@ -43,7 +43,10 @@
       user.id %}
       <button class="twit-follow">팔로우하기</button>
       {% endif %}
+      <!-- 스스로 해보기 4번 게시글 삭제 -->
+      <button class="post-delete">삭제</button>
       <div class="twit-content">{{twit.content}}</div>
+      <!-- =========================== -->
       {% if twit.img %}
       <div class="twit-img"><img src="{{twit.img}}" alt="섬네일" /></div>
       {% endif %}
@@ -90,5 +93,30 @@
       }
     })
   })
+  // 스스로 해보기 4번 게시글 삭제
+  document.querySelectorAll('.post-delete').forEach(function (tag) {
+    tag.addEventListener('click', function () {
+      const myId = document.querySelector('#my-id')
+      if (myId) {
+        const userId = tag.parentNode.querySelector('.twit-user-id').value
+        if (userId === myId.value) {
+          const postId = tag.parentNode.querySelector('.twit-id').value
+          if (confirm('삭제 하시겠습니까?')) {
+            axios
+              .post(`/post/${postId}/delete`)
+              .then(() => {
+                location.reload()
+              })
+              .catch((err) => {
+                console.error(err)
+              })
+          }
+        } else {
+          alert('사용자가 아닙니다.')
+        }
+      }
+    })
+  })
+  // ===========================
 </script>
 {% endblock %}

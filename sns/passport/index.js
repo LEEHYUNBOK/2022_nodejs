@@ -3,6 +3,8 @@ const passport = require('passport')
 const local = require('./localStrategy')
 const kakao = require('./kakaoStrategy')
 const User = require('../models/user')
+var save = {}
+const cacheUser = require('./cacheUser')
 
 module.exports = () => {
   // passport 핵심
@@ -27,25 +29,35 @@ module.exports = () => {
   passport.deserializeUser((id, done) => {
     // serializeUser에서 세션에 저장했던 아이디 받아
     // 데이터베이스에서 사용자 정보 조회
-    User.findOne({
-      where: { id },
-      // followers, followings 추가 해서 가져오기
-      include: [
-        {
-          model: User,
-          attributes: ['id', 'nick'],
-          as: 'Followers',
-        },
-        {
-          model: User,
-          attributes: ['id', 'nick'],
-          as: 'Followings',
-        },
-      ],
-    })
-      // 결과값 보내기
-      .then((user) => done(null, user))
-      .catch((err) => done(err))
+    if (cacheUser.getCh() || cacheUser.get()) {
+      User.findOne({
+        where: { id },
+        // followers, followings 추가 해서 가져오기
+        include: [
+          {
+            model: User,
+            attributes: ['id', 'nick'],
+            as: 'Followers',
+          },
+          {
+            model: User,
+            attributes: ['id', 'nick'],
+            as: 'Followings',
+          },
+        ],
+      })
+        // 결과값 보내기
+        .then((user) => {
+          cacheUser.add(user)
+          cacheUser.change(false)
+          // console.log('@@@@@@@@@@@@@@@@@@@@@@@')
+          done(null, user)
+        })
+        .catch((err) => done(err))
+    } else {
+      // console.log('==================================')
+      done(null, cacheUser.getUser())
+    }
   })
 
   local()

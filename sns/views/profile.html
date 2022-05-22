@@ -1,12 +1,25 @@
 {% extends 'layout.html' %} {% block content %}
 <div class="timeline">
+  <!-- 스스로 해보기 2번 프로필 정보 변경 -->
+  <div>
+    <form id="profile-form" action="/user/profile" method="post">
+      <div class="profile-form">
+        <input type="text" name="edit" placeholder="수정할 닉네임" />
+        <button id="edit-btn" type="submit" class="btn">닉네임 수정</button>
+      </div>
+    </form>
+  </div>
+  <!-- ================= -->
+
   <div class="followings half">
     <h2>팔로잉 목록</h2>
     {% if user.Followings %} {% for following in user.Followings %}
     <div>
       {{following.nick}}
+      <!-- 스스로 해보기 1번 팔로우 끊기 -->
       <input id="following-id" type="hidden" value="{{following.id}}" />
       <button class="delete-follow">삭제</button>
+      <!-- ================ -->
     </div>
 
     {% endfor %} {% endif %}
@@ -19,7 +32,9 @@
   </div>
 </div>
 {% endblock %} {% block script %}
+
 <script>
+  // 스스로 해보기 1번 팔로우 끊기
   document.querySelectorAll('.delete-follow').forEach(function (tag) {
     tag.addEventListener('click', function () {
       alert('test')
@@ -36,5 +51,6 @@
       }
     })
   })
+  // ================
 </script>
 {% endblock %}

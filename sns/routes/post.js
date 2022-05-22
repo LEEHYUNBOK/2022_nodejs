@@ -64,4 +64,16 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
   }
 })
 
+// 스스로 해보기 4번 게시글 삭제
+router.post('/:id/delete', isLoggedIn, async (req, res, next) => {
+  try {
+    await Post.destroy({ where: { id: req.params.id } })
+    return res.redirect('/')
+  } catch (error) {
+    // error 발생시 실행
+    console.error(error)
+    next(error)
+  }
+})
+
 module.exports = router

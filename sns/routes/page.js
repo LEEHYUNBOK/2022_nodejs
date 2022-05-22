@@ -23,12 +23,14 @@ router.use((req, res, next) => {
 })
 
 // GET /profile 요청 시
+// isLoggedIn가 true여야 실행된다.
 router.get('/profile', isLoggedIn, (req, res) => {
   // profile.html 출력, { title: "내정보 Node-Bird" } 객체도 같이 보냄
   res.render('profile', { title: '내 정보 - NodeBird' })
 })
 
 // GET /join 요청 시
+// isNotLoggedIn가 true여야 실행된다.
 router.get('/join', isNotLoggedIn, (req, res) => {
   // join.html 출력, { title: '회원가입 - NodeBird' } 객체도 같이 보냄
   res.render('join', { title: '회원가입 - NodeBird' })
