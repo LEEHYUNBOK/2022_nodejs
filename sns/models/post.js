@@ -1,17 +1,13 @@
-// sequelize 불러오기
 const Sequelize = require('sequelize')
 
-// post 테이블 sequelize로 만듦
 module.exports = class Post extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
       {
-        // content 컬럼
         content: {
           type: Sequelize.STRING(140),
           allowNull: false,
         },
-        // img 컬럼
         img: {
           type: Sequelize.STRING(200),
           allowNull: true,
@@ -29,9 +25,11 @@ module.exports = class Post extends Sequelize.Model {
       }
     )
   }
-  // Hashtag와 User 테이블와 연결
+
   static associate(db) {
     db.Post.belongsTo(db.User)
     db.Post.belongsToMany(db.Hashtag, { through: 'PostHashtag' })
+    // 스스로 해보기 3번 게시글 좋아요 누르기 및 좋아요 취소하기
+    db.Post.belongsToMany(db.User, { through: 'PostLikes', as: 'Likes' })
   }
 }

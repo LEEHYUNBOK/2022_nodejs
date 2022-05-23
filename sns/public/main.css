@@ -186,3 +186,13 @@ footer {
   font-size: 12px;
   cursor: pointer;
 }
+
+#like {
+  padding: 1px 5px;
+  background: #fff;
+  border: 1px solid silver;
+  border-radius: 5px;
+  color: crimson;
+  font-size: 12px;
+  cursor: pointer;
+}

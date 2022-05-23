@@ -4,8 +4,12 @@ const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
 
+const cacheUser = require('../passport/cacheUser')
+
 // Post, Hashtag 모델 불러오기
-const { Post, Hashtag } = require('../models')
+// 스스로 해보기 3번 게시글 좋아요 누르기 및 좋아요 취소하기
+const { Post, Hashtag, User } = require('../models')
+
 const { isLoggedIn } = require('./middlewares')
 
 const router = express.Router()
@@ -29,6 +33,38 @@ const upload = multer({
   }),
   limits: { fileSize: 5 * 1024 * 1024 },
 })
+
+// 스스로 해보기 3번 게시글 좋아요 누르기 및 좋아요 취소하기
+router.post('/like', isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await Post.findOne({ where: { id: req.body.id } })
+    if (post) {
+      const result = await post.addLikes(req.user.id)
+
+      cacheUser.change(true)
+      res.send('success')
+    }
+  } catch (error) {
+    console.error(error)
+    next(error)
+  }
+})
+
+router.post('/dislike', isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await Post.findOne({ where: { id: req.body.id } })
+    if (post) {
+      const result = await post.removeLikes(req.user.id)
+
+      cacheUser.change(true)
+      res.send('success')
+    }
+  } catch (error) {
+    console.error(error)
+    next(error)
+  }
+})
+// =======================================================
 
 // POST /img 요청시
 router.post('/img', isLoggedIn, upload.single('img'), (req, res) => {

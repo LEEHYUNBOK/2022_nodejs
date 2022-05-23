@@ -65,5 +65,7 @@ module.exports = class User extends Sequelize.Model {
       as: 'Followings',
       through: 'Follow',
     })
+    // 스스로 해보기 3번 게시글 좋아요 누르기 및 좋아요 취소하기
+    db.User.belongsToMany(db.Post, { through: 'PostLikes', as: 'Likes' })
   }
 }

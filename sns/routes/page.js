@@ -18,6 +18,10 @@ router.use((req, res, next) => {
   res.locals.followerIdList = req.user
     ? req.user.Followings.map((f) => f.id)
     : []
+
+  // 스스로 해보기 3번 게시글 좋아요 누르기 및 좋아요 취소하기
+  res.locals.likes = req.user ? req.user.Likes.map((p) => p.id) : []
+
   // 다음 미들웨어 실행
   next()
 })

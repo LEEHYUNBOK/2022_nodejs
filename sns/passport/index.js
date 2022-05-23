@@ -2,7 +2,10 @@
 const passport = require('passport')
 const local = require('./localStrategy')
 const kakao = require('./kakaoStrategy')
-const User = require('../models/user')
+
+// 스스로 해보기 3번 게시글 좋아요 누르기 및 좋아요 취소하기
+const { User, Post } = require('../models')
+
 var save = {}
 const cacheUser = require('./cacheUser')
 
@@ -44,18 +47,23 @@ module.exports = () => {
             attributes: ['id', 'nick'],
             as: 'Followings',
           },
+
+          // 스스로 해보기 3번 게시글 좋아요 누르기 및 좋아요 취소하기
+          {
+            model: Post,
+            as: 'Likes',
+          },
+          // =======================================================
         ],
       })
         // 결과값 보내기
         .then((user) => {
           cacheUser.add(user)
           cacheUser.change(false)
-          // console.log('@@@@@@@@@@@@@@@@@@@@@@@')
           done(null, user)
         })
         .catch((err) => done(err))
     } else {
-      // console.log('==================================')
       done(null, cacheUser.getUser())
     }
   })

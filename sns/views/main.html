@@ -45,11 +45,18 @@
       {% endif %}
       <!-- 스스로 해보기 4번 게시글 삭제 -->
       <button class="post-delete">삭제</button>
-      <div class="twit-content">{{twit.content}}</div>
       <!-- =========================== -->
+      <div class="twit-content">{{twit.content}}</div>
       {% if twit.img %}
       <div class="twit-img"><img src="{{twit.img}}" alt="섬네일" /></div>
       {% endif %}
+      <!-- 스스로 해보기 3번 게시글 좋아요 누르기 및 좋아요 취소하기 -->
+      {% if not likes.includes(twit.id) %}
+      <button class="twit-like" id="like">좋아요</button>
+      {% else %}
+      <button class="twit-dislike" id="like">좋아요 취소</button>
+      {% endif %}
+      <!-- =========================== -->
     </div>
     {% endfor %}
   </div>
@@ -93,6 +100,7 @@
       }
     })
   })
+
   // 스스로 해보기 4번 게시글 삭제
   document.querySelectorAll('.post-delete').forEach(function (tag) {
     tag.addEventListener('click', function () {
@@ -114,6 +122,41 @@
         } else {
           alert('사용자가 아닙니다.')
         }
+      }
+    })
+  })
+  // ===========================
+
+  // 스스로 해보기 3번 게시글 좋아요 누르기 및 좋아요 취소하기
+  document.querySelectorAll('.twit-like').forEach(function (tag) {
+    tag.addEventListener('click', function () {
+      const myId = document.querySelector('#my-id')
+      if (myId) {
+        const twitId = tag.parentNode.querySelector('.twit-id').value
+        axios
+          .post(`/post/like`, { id: twitId })
+          .then(() => {
+            location.reload()
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+      }
+    })
+  })
+  document.querySelectorAll('.twit-dislike').forEach(function (tag) {
+    tag.addEventListener('click', function () {
+      const myId = document.querySelector('#my-id')
+      if (myId) {
+        const twitId = tag.parentNode.querySelector('.twit-id').value
+        axios
+          .post(`/post/dislike`, { id: twitId })
+          .then(() => {
+            location.reload()
+          })
+          .catch((err) => {
+            console.error(err)
+          })
       }
     })
   })
